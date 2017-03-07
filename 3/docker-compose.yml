@@ -1,0 +1,21 @@
+version: '2'
+services:
+  app1:
+    build:
+      context: .
+    volumes:
+      - ./test_app:/test_app
+    # In the app1 container you'll be able to talk to address the app2 container
+    # using the app2 DNS name
+    links:
+      - app2
+
+  app2:
+    build:
+      context: .
+    volumes:
+      - ./test_app2:/test_app2
+    # These override the environment variables defined inside the Dockerfile
+    environment:
+      - "FLASK_APP=test_app2/hello.py"
+    command: flask run --host=0.0.0.0
